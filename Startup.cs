@@ -73,18 +73,25 @@ namespace API_CRON
             //IRestResponse response = client.Execute(request);
 
             Global global = new Global(12, 3, 2, 33, 2, 3);
-            backgroundJobs.Schedule(() => Console.WriteLine(global), TimeSpan.FromMinutes(1));
-
-
+            //backgroundJobs.Schedule(() => Console.WriteLine(global), TimeSpan.FromMinutes(1));
+            backgroundJobs.Schedule(() => callRestClient("Hello"), TimeSpan.FromMinutes(1));
+            //backgroundJobs.Schedule(() => Console.WriteLine(global), TimeSpan.FromMinutes(2));
+            //backgroundJobs.Schedule(() => Console.WriteLine(global), TimeSpan.FromMinutes(3));
 
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-            });
+            });            
+        }
 
-            
+        public void callRestClient(string message)
+        {
+            var client = new RestClient("https://api.covid19api.com/summary");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            IRestResponse response = client.Execute(request);
         }
     }
 }

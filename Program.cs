@@ -15,6 +15,17 @@ namespace API_CRON
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
+
+            var options = new BackgroundJobServerOptions
+            {
+                SchedulePollingInterval = TimeSpan.FromSeconds(10),
+            };
+
+            using (var server = new BackgroundJobServer(options))
+            {
+                Console.WriteLine("Hangfire Server started. Press any key to exit...");
+                Console.ReadLine();
+            }
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
